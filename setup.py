@@ -12,7 +12,7 @@ setup(
     name='Flask-Arangodb',
     version=version['VERSION'],
     license='MIT',
-    url='https://github.com/sebastiancodes/flask-arangodb',
+    url='https://github.com/sebastiancodes/Flask-Arangodb',
     description='Flask extension for ArangoDB using python-arango',
     long_description=readme,
     author='Bas van den Broek',
