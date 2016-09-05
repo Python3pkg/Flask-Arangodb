@@ -4,7 +4,7 @@ import unittest
 
 from flask import Flask
 
-from flask_arangodb import ArangoDB
+from flask_arangodb.arangodb import ArangoDB
 
 
 class FlaskRequestTests(unittest.TestCase):
