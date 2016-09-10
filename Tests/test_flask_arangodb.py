@@ -16,11 +16,10 @@ class FlaskRequestTests(unittest.TestCase):
     def tearDown(self):
         self.context.pop()
 
-
 class FlaskArangoDBConfigTests(FlaskRequestTests):
     def setUp(self):
         super(FlaskArangoDBConfigTests, self).setUp()
-        self.app.config['ARANGO_SETTINGS'] = {'host': 'localhost', 'port': 8529}
+        self.app.config['ARANGO_CLIENT'] = {'host': 'localhost', 'port': 8529}
         self.app.config['ARANGO_DB'] = 'flask_arangodb_test'
 
     def test_direct_initialization(self):
@@ -36,8 +35,22 @@ class FlaskArangoDBConfigTests(FlaskRequestTests):
 class FlaskArangoDatabaseTests(FlaskRequestTests):
     def setUp(self):
         super(FlaskArangoDatabaseTests, self).setUp()
-        self.app.config['ARANGO_SETTINGS'] = {'host': 'localhost', 'port': 8529}
+        self.app.config['ARANGO_CLIENT'] = {'host': 'localhost', 'port': 8529}
         self.app.config['ARANGO_DB'] = 'flask_arangodb_test'
+        self.arango = ArangoDB()
+        self.arango.init_app(self.app)
+        if 'flask_arangodb_test' not in self.arango.client.databases():
+            self.arango.client.create_database('flask_arangodb_test')
+
+    def test_database_access(self):
+        self.assertIsNotNone(self.arango.db.properties())
+
+
+class FlaskArangoDatabaseDictionaryTests(FlaskRequestTests):
+    def setUp(self):
+        super(FlaskArangoDatabaseDictionaryTests, self).setUp()
+        self.app.config['ARANGO_CLIENT'] = {'host': 'localhost', 'port': 8529}
+        self.app.config['ARANGO_DB'] = {'name': 'flask_arangodb_test'}
         self.arango = ArangoDB()
         self.arango.init_app(self.app)
         if 'flask_arangodb_test' not in self.arango.client.databases():
